@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# initialize the first argument as a filename 
+
+if [ $# -le 1 ]; then
+	if [ -f $1 ]; then
+		filename=$1
+	else
+		flag=$1
+	fi
+else 
+	filename=$1
+	flag=$2
+
+fi 
+
+# initialize the counter 
+n=1
+
+case $flag in
+	-n )
+	# loops through file line by line and prints each
+	while IFS= read -r line; do
+		echo "$n. $line"
+   		n=$((n+1)) 
+	done < "$1" 
+	;;
+
+	-h )
+	echo "./lnnm <filename> [OPTIONAL -n FLAG]" 
+	echo "Description: displays all lines of a file with or without numbers." 
+	echo "-n : display numbered lines."
+	echo "If not provided, the program will simply display the lines."
+	;;	
+
+	* )
+	# loop through file line by line and print each with line number
+	while IFS= read -r line; do
+   		echo "$line"
+	done < "$1"
+	;;
+esac 

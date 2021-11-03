@@ -1,0 +1,29 @@
+#!/bin/bash
+
+
+if [ $# -le 1 ]; then
+	if [ ${#1} -le 2 ]; then
+		flag=$1
+	else
+		url=$1
+	fi 
+else
+	url=$1
+	flag=$2
+
+fi
+
+case $flag in 
+	-f )
+	wget -qO- $url | tr \" \\n | grep https\*:// >>urls
+	;;
+	-h )
+	echo "./seturls <url> [OPTIONAL -f FLAG]"
+	echo "Description: prints all href links in index.html of the website. "
+       	echo "-f : write output to a 'urls' file in the current working directory." 	
+	;;
+	* )
+	wget -qO- $url | tr \" \\n | grep https\*://
+	;;
+
+esac 

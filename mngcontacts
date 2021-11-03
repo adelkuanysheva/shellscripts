@@ -1,0 +1,59 @@
+#!/bin/bash
+
+# checks if contacts directory exists, makes it if it does not exist. 
+if [ -d ./contacts ] || mkdir ./contacts ; then  
+
+	while getopts ":ardh" opt; do
+		case ${opt} in 
+			a )
+			# creates a new contacts	
+				read -p 'Enter a Name: ' name
+				read -p 'Enter an email: ' email 
+				read -p 'Enter an address: ' addr
+				read -p 'Enter a phone number: ' number
+
+				echo  "Name->${name},Email->${email},Address->${addr},Number->${number}" \
+				>./contacts/${name} 
+			;;
+			r ) 
+			# removes a contact
+				read -p 'Enter their Name: ' name
+				rm ./contacts/${name}	
+			;;
+			d )
+			# displays formatted contact info 
+			read -p 'Enter their Name: ' name 
+
+			string=`cat ./contacts/${name}`
+			read -r name email addr number <<<$(echo $string | sed 's/ /-/g' | sed 's/,/ /g')
+			read -p 'Enter a data field (email/addr/num) or press Enter to see all: ' opt
+
+			# displays only data field that is requested 
+			case $opt in 
+				email )
+					echo $email
+				;;
+				addr )
+					echo $addr
+				;;
+				num )
+					echo $number
+				;;
+				* )
+				echo $name $'\n'$email $'\n'$addr $'\n'$number
+				;;
+			esac
+			;;
+			
+			h )
+			echo "Description: Program that adds, removes, or displays contacts." 
+			echo "Saves contacts as files under contacts directory." 
+			echo "-a : Add a new contact."
+			echo "-r : Remove a contact with name."
+			echo "-d : Display contact info with name and/or provided data field. "
+			;;
+		esac
+	done
+fi
+
+
